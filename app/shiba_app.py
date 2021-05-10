@@ -2,32 +2,17 @@
 import os
 import json
 from pprint import pprint
-#from dateutil.parser import parse as parse_datetime ~~~~ don't think i need this
-
 import requests
-from dotenv import load_dotenv
-#from pgeocode import Nominatim as Geocoder ~~~~ don't think i need this
-#from pandas import isnull ~~~~ don't think i need this
+import random
+from PIL import Image, ImageFont, ImageDraw
+import shutil
 
-#
-# def advice_wrapper(callback):
-#     def inner_advice():
-#         callback()
-#
-#     return inner_advice
-#
-#
-# def get_advice():
-#     response = requests.get(request_url)
-#     parsed_response = json.loads(response.text)
-#
-# get_advice = advice_wrapper(get_advice)
-
-
-
-
+#advice code
 
 def advice_search(pointer):
+#don't forget a docstring
+    global parsed_response
+    global advicestr
     searching = True
     while searching:
         if pointer == "random":
@@ -45,10 +30,9 @@ def advice_search(pointer):
         response = requests.get(request_url)
         parsed_response = json.loads(response.text)
 
-        try:
-            if parsed_response["message"]["text"] == 'No advice slips found matching that search term.':
-                print(f"The Shiba of Wisdom cannot offer advice about {advicestr}. Please try again.")
-        except:
+        if 'message' in parsed_response:
+            print(f"The Shiba of Wisdom cannot offer advice about {advicestr}. Please try again.")
+        else:
             searching = False
 
 
@@ -65,54 +49,51 @@ while checking:
 
 advice_search(advice_type)
 
-print("success?")
+if advice_type == 'random':
+    your_advice = parsed_response['slip']['advice']
 
-#     vibee = vibe.lower()
-#     if vibee == "random":
-#         request_url = "https://api.adviceslip.com/advice"
-#     elif vibee == "ask":
-#         while asking:
-#             asking = False
-#             advicestr = input("What do you wish to ask the Shiba of Wisdom for advice on?:")
-#             #https://api.adviceslip.com/advice/search/spiders
-#             request_url = f"https://api.adviceslip.com/advice/search/{advicestr}"
-#                 ###insert data validation
-
-
-
-#
-# response = requests.get(request_url)
-# parsed_response = json.loads(response.text)
-# print(parsed_response)
+else:
+    advice_num = int(parsed_response["total_results"])
+    if advice_num > 1:
+        #love
+        rand_advice = random.randint(0,advice_num-1)
+        your_advice = parsed_response["slips"][rand_advice]['advice']
+    else:
+        #avocado
+        your_advice = parsed_response["slips"][0]["advice"]
 
 
 
+print(your_advice)
+print("- The Shiba of Wisdom")
+print("")
+print("You can view your Shiba of Wisdom in the shibas folder in this directory.")
+#maybe add extra part here to keep track of all your historical advice?
+
+#shiba image code
+
+request_url = "http://shibe.online/api/shibes?count=1&urls=true&httpsUrls=true"
+response = requests.get(request_url)
+parsed_response = json.loads(response.text)
+shibalink = parsed_response[0]
+if advice_type == 'random':
+    shibafilename = "random_"+shibalink.split("/")[-1]
+else:
+    shibafilename = advicestr+ "_"+shibalink.split("/")[-1]
 
 
-        #
-        #
-        # get_advice()
-        #
-        # print(parsed_response)
+#GETTING SHIBA IMAGE FROM REQUESTS
+picresponse = requests.get(shibalink, stream=True)
 
 
-        #if
-          #
-          # {
-          #  "message": {
-          #     "type": "notice",
-          #     "text": "Advice slip not found."
-          #   }
-          # }
-        # print("The Shiba of Wisdom cannot offer advice on that topic.")
-        # print("Try entering a single, correctly spelled topic for advice (no numbers please!)")
-        # else:
-        #    asking = False
+#writing advice on shiba
+#play around with size
+#advice_font = ImageFont.truetype('FONT ADDRESS',200)
 
 
 
-
-        #f"https://api.weather.gov/points/{geo.latitude},{geo.longitude}"
-        #response = requests.get(request_url)
-        # if response.status_code != 200:
-        #     return None
+#SAVING SHIBA IMAGE
+#save in separate folder than final shibas of wisdom
+picresponse.raw.decode_content = True
+with open(shibafilename,'wb') as f:
+    shutil.copyfileobj(picresponse.raw,f)
