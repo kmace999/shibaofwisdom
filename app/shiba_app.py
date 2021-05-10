@@ -11,7 +11,13 @@ import shutil
 
 
 def get_advice(amount):
-#don't forget docstring
+    """
+    Selects random advice from API response given a user input that returned more than 1 advice slip
+
+    Params: amount is the number of advice slips the API generated
+
+    Examples: get_advice(6)
+    """
     global your_advice
     if amount > 1:
         #love
@@ -56,8 +62,9 @@ while searching:
 if advice_type == 'random':
     your_advice = parsed_response['slip']['advice']
 
-advice_num = int(parsed_response["total_results"])
-get_advice(advice_num)
+else:
+    advice_num = int(parsed_response["total_results"])
+    get_advice(advice_num)
 
 #shiba image code
 
