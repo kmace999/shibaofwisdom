@@ -6,6 +6,7 @@ import requests
 import random
 from PIL import Image, ImageFont, ImageDraw
 import shutil
+import textwrap
 
 #advice code
 
@@ -112,9 +113,40 @@ if __name__ == "__main__":
     with open(shiba_pic_filepath,'wb') as f:
         shutil.copyfileobj(picresponse.raw,f)
 
+    notext_shiba = Image.open(shiba_pic_filepath)
+    width, height = notext_shiba.size
+
+    font_filepath = os.path.join(os.path.dirname(__file__),"..","JAPAB___.TTF")
+    relative_font = int(height/20)
+    #relative_length = int(width*.2)
+    title_font = ImageFont.truetype(font_filepath,relative_font)
+    editable_shiba = ImageDraw.Draw(notext_shiba)
+
+    font_color = (255,255,255)
+    border_color = (0,0,0)
+
+    offset = 2
+    print(width,height)
+    print(textwrap.wrap(your_advice, 29))
+    for chunk in textwrap.wrap(your_advice, 29):
+        editable_shiba.text((5,offset),chunk,fill=font_color,stroke_fill = border_color,font=title_font,stroke_width = 1)
+        offset += title_font.getsize(chunk)[1]
+
+
+    editable_shiba.text((5,height*(9/10)),"~ Shiba of Wisdom",fill=font_color,stroke_fill = border_color,font=title_font,stroke_width = 1)
+
+
+
+    text_shibafilename = "final_"+shibafilename
+    text_shiba_filepath = os.path.join(os.path.dirname(__file__), "..", "Shibas of Wisdom", text_shibafilename)
+    notext_shiba.save(text_shiba_filepath)
+
+
     print("")
     print(your_advice)
     print("- The Shiba of Wisdom")
     print("")
-    print("You can view your Shiba of Wisdom in the Shiba Images folder in this directory.")
+    print("You can view your Shiba of Wisdom in the Shibas of Wisdom folder in this directory.")
     print("")
+
+    notext_shiba.show()
