@@ -96,6 +96,8 @@ if __name__ == "__main__":
     response = requests.get(request_url)
     parsed_response = json.loads(response.text)
     shibalink = parsed_response[0]
+    if advice_type == "random":
+        advicestr = ""
     shiba_file_name(advice_type,shibalink,advicestr)
 
     shiba_pic_filepath = os.path.join(os.path.dirname(__file__), "..", "Shiba Images", shibafilename)
