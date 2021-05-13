@@ -1,0 +1,16 @@
+# These are the requirements for the Shiba of Wisdom program.
+
+#
+# DEVELOPMENT / PRODUCTION
+#
+
+python-dotenv
+pandas
+requests
+Pillow
+
+#
+# TEST
+#
+
+pytest
