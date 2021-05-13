@@ -37,6 +37,7 @@ Below is a guide to the acceptable user-given inputs in the program:
 | Do you wish to ask the Shiba of Wisdom about something or receive fated, random advice? [ask/random]: | ask, random |
 | What do you wish to ask the Shiba of Wisdom for advice on?: | any string search term ex: avocado, love, fail |
 
+The shiba images without advice are stored in the Shiba Images folder in the repository, and the Shibas of Wisdom (shiba images with advice written on them) are accessible in the Shibas of Wisdom folder, characterized by the user's chosen advice search term or random depending on user inputs. 
 
 ## Testing
 
