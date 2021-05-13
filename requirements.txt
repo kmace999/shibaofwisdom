@@ -8,6 +8,7 @@ python-dotenv
 pandas
 requests
 Pillow
+gunicorn
 
 #
 # TEST
