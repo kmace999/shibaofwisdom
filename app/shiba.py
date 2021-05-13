@@ -127,8 +127,10 @@ if __name__ == "__main__":
 
     offset = 2
     print(width,height)
-    print(textwrap.wrap(your_advice, 29))
-    for chunk in textwrap.wrap(your_advice, 29):
+    test_width = int(width*.035)
+
+    print(textwrap.wrap(your_advice, width=test_width))
+    for chunk in textwrap.wrap(your_advice, width=test_width):
         editable_shiba.text((5,offset),chunk,fill=font_color,stroke_fill = border_color,font=title_font,stroke_width = 1)
         offset += title_font.getsize(chunk)[1]
 
